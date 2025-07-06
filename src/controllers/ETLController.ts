@@ -1,16 +1,14 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { runETL } from '../etl';
 import type { SourceData } from '../etl';
 
-export const uploadAndRunETL = async (req: Request, res: Response) => {
+export const uploadAndRunETL = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body as SourceData;
     if (!data || !Array.isArray(data.data)) {
-      res.status(400).json({
-        success: false,
-        error: 'Invalid JSON format. Expected { data: [...] }',
-      });
-      return;
+      const error: any = new Error('Invalid JSON format. Expected { data: [...] }');
+      error.status = 400;
+      return next(error);
     }
     await runETL(data);
     res.status(200).json({
@@ -18,9 +16,6 @@ export const uploadAndRunETL = async (req: Request, res: Response) => {
       message: 'ETL process completed successfully',
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      error: error?.message || 'ETL process failed',
-    });
+    next(error);
   }
 }; 

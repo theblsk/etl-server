@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './routes';
+import { requestLogger, errorLogger } from './middleware/logging';
 
 export const createApp = () => {
   const app = express();
@@ -14,6 +15,7 @@ export const createApp = () => {
   console.log('🔒 Parsed CORS origins:', corsOrigins);
 
   // Middleware
+  app.use(requestLogger);
   app.use(cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
@@ -50,15 +52,7 @@ export const createApp = () => {
   });
   
   // Global error handler
-  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error('Global error handler:', err);
-    
-    res.status(err.status || 500).json({
-      success: false,
-      error: err.message || 'Internal server error',
-      ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-    });
-  });
+  app.use(errorLogger);
   
   return app;
 }; 
