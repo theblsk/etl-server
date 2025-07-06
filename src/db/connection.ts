@@ -6,6 +6,16 @@ import * as schema from './schemas';
 // Create postgres client
 const client = postgres(dbConfig.url);
 
+export const checkDbConnection = async () => {
+  try {
+    await client`SELECT 1`;
+    console.log('✅ Database connection successful');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    process.exit(1);
+  }
+};
+
 // Create drizzle instance
 export const db = drizzle(client, { schema });
 

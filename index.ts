@@ -1,9 +1,11 @@
 import { createApp } from './src/app';
 import { serverConfig } from './src/config/database';
+import { checkDbConnection } from './src/db/connection';
 // import { runETL } from './src/etl';
 
 async function startServer() {
   try {
+    await checkDbConnection();
     const app = createApp();
     
     app.listen(serverConfig.port, () => {
