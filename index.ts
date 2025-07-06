@@ -1,12 +1,9 @@
 import { createApp } from './src/app';
 import { serverConfig } from './src/config/database';
-import { runETL } from './src/etl';
+// import { runETL } from './src/etl';
 
 async function startServer() {
   try {
-    // Run the ETL process to seed the database
-    await runETL();
-    
     const app = createApp();
     
     app.listen(serverConfig.port, () => {

@@ -10,20 +10,19 @@ import {
   createBulkLineItems
 } from '../models';
 
-// Define interfaces for the source data structure
-interface SourceLineItem {
+export interface SourceLineItem {
   account_id: string;
   name: string;
   value: number;
 }
 
-interface SourceSection {
+export interface SourceSection {
   name: string;
   value: number;
   line_items: SourceLineItem[];
 }
 
-interface SourceReport {
+export interface SourceReport {
   rootfi_company_id: number;
   platform_id: string;
   period_start: string;
@@ -37,20 +36,15 @@ interface SourceReport {
   non_operating_expenses: SourceSection[];
 }
 
-interface SourceData {
+export interface SourceData {
   data: SourceReport[];
 }
 
-export async function runETL() {
+export async function runETL(sourceData: SourceData) {
   console.log('🔄 Starting ETL process...');
   
   try {
-    // 1. EXTRACT - Read the dataset
-    const datasetPath = join(__dirname, '../db/datasets/dataSet1.json');
-    const rawData = readFileSync(datasetPath, 'utf8');
-    const sourceData: SourceData = JSON.parse(rawData);
     const sourceReports = sourceData.data;
-    
     console.log(`📊 Found ${sourceReports.length} reports to process`);
     
     // 2. TRANSFORM & LOAD

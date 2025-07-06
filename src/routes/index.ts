@@ -3,6 +3,7 @@ import companyRoutes from './companyRoutes';
 import accountRoutes from './accountRoutes';
 import reportRoutes from './reportRoutes';
 import lineItemRoutes from './lineItemRoutes';
+import etlRoutes from './etlRoutes';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/companies', companyRoutes);
 router.use('/accounts', accountRoutes);
 router.use('/reports', reportRoutes);
 router.use('/line-items', lineItemRoutes);
+router.use('/etl', etlRoutes);
 
 export default router; 
