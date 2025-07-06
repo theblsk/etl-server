@@ -4,7 +4,13 @@ import { dbConfig } from '../config/database';
 import * as schema from './schemas';
 
 // Create postgres client
-const client = postgres(dbConfig.url);
+const client = postgres(dbConfig.url, {
+  connect_timeout: 10,
+  idle_timeout: 20,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
 export const checkDbConnection = async () => {
   try {

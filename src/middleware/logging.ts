@@ -2,13 +2,15 @@ import type { Request, Response, NextFunction } from 'express';
 
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
   const start = Date.now();
+  const { method, originalUrl } = req;
+  const requestMessage = `[${new Date().toISOString()}] ==> ${method} ${originalUrl}`;
+  console.log(requestMessage);
   
   res.on('finish', () => {
     const duration = Date.now() - start;
-    const { method, originalUrl } = req;
     const { statusCode } = res;
     
-    const message = `[${new Date().toISOString()}] ${method} ${originalUrl} ${statusCode} - ${duration}ms`;
+    const message = `[${new Date().toISOString()}] <== ${method} ${originalUrl} ${statusCode} - ${duration}ms`;
     
     if (statusCode >= 400) {
       console.error(message);
