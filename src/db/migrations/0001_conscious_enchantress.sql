@@ -1,0 +1,1 @@
+ALTER TABLE "reports" ALTER COLUMN "platform_report_id" SET DATA TYPE text;
